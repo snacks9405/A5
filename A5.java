@@ -11,7 +11,8 @@ import java.util.*;
 public class A5
 {        
     /** define your two data structures below */
-    
+    private static Set<String> dict = new TreeSet<>(); //comparator? probably not necessary.
+    private static Map<String, TreeSet> neighbors = new TreeMap<>();
 
     /**
      *  Given the name of a text file, loads the words contained
@@ -29,8 +30,19 @@ public class A5
      */
     public static void loadWords(String fileName)
     {
-        /* To be completed */
-
+        Scanner input = null;
+        try{
+            input = new Scanner(new File(fileName));
+            while (input.hasNext()){
+                dict.add(input.next().toLowerCase());
+            }
+        }catch(Exception e){
+            System.out.println("Error reading from " + fileName + ". Program will now terminate.");
+            System.exit(0);
+        }finally{
+            if (input != null)
+                input.close();
+        }
     }// loadWords method
 
     /**
@@ -46,8 +58,14 @@ public class A5
      */
     public static void findNeighbors(String word)
     {
-        /* To be completed */
-
+        Set words = new TreeSet<>();
+        String dictWord;
+        for (Object o : dict)
+        {
+            dictWord = o.toString();
+            //enter compare logic here. 
+            words.add(word);
+        }
     }// findNeighbors method
 
     /**
@@ -58,10 +76,9 @@ public class A5
      */
     public static void findAllNeighbors()
     {
-        /* To be completed */
-        
-    }// findAllNeighbors method
 
+    }// findAllNeighbors method
+    
     /**
      *  Sends the contents of the neighbors data structure to the terminal.
      *  The required format of this output is described in the handout for this
@@ -69,8 +86,11 @@ public class A5
      */
     public static void printAllNeighbors()
     {
-        /* To be completed */
-        
+        for (String key : neighbors.keySet())
+        {
+            System.out.println(key + ": ");
+            //iterate neighbors val sets
+        }
     }// printAllNeighbors method
 
     /**
@@ -110,7 +130,7 @@ public class A5
     public static ArrayList<String> findSequence(String start, String finish)
     {
         /* To be complete */
-        
+
         return null;
     }// findSequence method
 
@@ -149,7 +169,7 @@ public class A5
             sequence = findSequence( "synonym", "homonym" );
             if (sequence == null)
                 System.out.println( 
-                     "There is no sequence from \"synonym\" to \"homonym\"." );
+                    "There is no sequence from \"synonym\" to \"homonym\"." );
             else
                 System.out.println( sequence );
 
