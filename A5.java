@@ -111,12 +111,11 @@ public class A5
     public static void printAllNeighbors()
     {
         for (String key : neighbors.keySet()) {
-            System.out.printf("%s: [", key);
-            int i = 0;
+            System.out.print(key + ":");
             for(String word: neighbors.get(key)) {
-                System.out.printf("%s%s", i++ != 0 ? " " : "", word);
+                System.out.print(" " + word);
             }
-            System.out.println("]");
+            System.out.println();
         }
     }// printAllNeighbors method
 
