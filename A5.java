@@ -76,16 +76,13 @@ public class A5
         
         for(String w : words)
         {
-            boolean strike = false;
+            int strikes = 0;
             for(int i=0; i<word.length(); i++)
             {
                 if(w.charAt(i) != word.charAt(i))
-                {
-                    if(strike) break;
-                    strike = true;
-                }
+                    if(++strikes == 2) break;
             }
-            if(strike) wordList.add(word);
+            if(strikes == 1) wordList.add(w);
         }
         if(wordList.size() != 0) neighbors.put(word, wordList);
     }// findNeighbors method
@@ -113,8 +110,6 @@ public class A5
      */
     public static void printAllNeighbors()
     {
-        Map<String, Set<String>> neighbors = new TreeMap<>();
-
         for (String key : neighbors.keySet()) {
             System.out.printf("%s: [", key);
             int i = 0;
@@ -122,7 +117,6 @@ public class A5
                 System.out.printf("%s%s", i++ != 0 ? " " : "", word);
             }
             System.out.println("]");
-            
         }
     }// printAllNeighbors method
 
@@ -169,7 +163,11 @@ public class A5
      */
     public static ArrayList<String> findSequence(String start, String finish)
     {
-        /* To be complete */
+        Queue<ArrayList<String>> q = new LinkedList<>();
+        ArrayList<String> list = new ArrayList<>();
+        
+        q.add(list);
+        
 
         return null;
     }// findSequence method
