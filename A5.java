@@ -11,7 +11,7 @@ import java.util.*;
 public class A5
 {        
     /** define your two data structures below */
-    private static Set<String> dict = new TreeSet<>(); //comparator? probably not necessary.
+    private static ArrayList<Set> dict = new ArrayList<>();
     private static Map<String, TreeSet> neighbors = new TreeMap<>();
 
     /**
@@ -31,10 +31,20 @@ public class A5
     public static void loadWords(String fileName)
     {
         Scanner input = null;
+        int longest = 1;
+        Set currentSet;
+        for (int i = 0; i < 17; i++)
+        {
+            currentSet = new TreeSet<String>();
+            dict.add(currentSet);
+        }
         try{
             input = new Scanner(new File(fileName));
-            while (input.hasNext()){
-                dict.add(input.next().toLowerCase());
+            while (input.hasNext())
+            {
+                String word = input.next().toLowerCase();
+                currentSet = dict.get(word.length());
+                currentSet.add(word);
             }
         }catch(Exception e){
             System.out.println("Error reading from " + fileName + ". Program will now terminate.");
@@ -43,6 +53,11 @@ public class A5
             if (input != null)
                 input.close();
         }
+        for (Set o : dict) //display load array results
+        {
+            System.out.println(o);
+        }
+        System.out.println(longest);
     }// loadWords method
 
     /**
@@ -58,14 +73,26 @@ public class A5
      */
     public static void findNeighbors(String word)
     {
-        Set words = new TreeSet<>();
-        String dictWord;
-        for (Object o : dict)
+        Set lengthIndex = dict.get(word.length());
+        TreeSet words = new TreeSet<String>();
+        int wordDifference = 0;
+        for(Object o : lengthIndex)
         {
-            dictWord = o.toString();
-            //enter compare logic here. 
-            words.add(word);
+            char[] dictWord = o.toString().toCharArray();
+            char[] currentWord = word.toCharArray();
+            for(int i = 0; i < dictWord.length; i++)
+            {
+                if (currentWord[i] == dictWord[i]) continue;
+                if ((currentWord[i] - dictWord[i]) / 2 == 1 
+                || (currentWord[i] + dictWord[i]) / 2 == 1) 
+                    wordDifference++;
+            }
+            if (wordDifference == 1) words.add(o.toString());
         }
+        if (words.isEmpty())
+            return;
+        else
+            neighbors.put(word, words);
     }// findNeighbors method
 
     /**
@@ -76,9 +103,15 @@ public class A5
      */
     public static void findAllNeighbors()
     {
-
+        TreeSet currentSetIndex;
+        TreeSet currentSet;
+        Iterator iterator;
+        for(Object o : dict)
+        {
+            
+        }
     }// findAllNeighbors method
-    
+
     /**
      *  Sends the contents of the neighbors data structure to the terminal.
      *  The required format of this output is described in the handout for this
@@ -89,9 +122,19 @@ public class A5
         for (String key : neighbors.keySet())
         {
             System.out.println(key + ": ");
-            //iterate neighbors val sets
+            for (Object o : neighbors.get(key))
+            {
+                System.out.print(o);
+            }
         }
     }// printAllNeighbors method
+
+    public static void testMe()
+    {
+        loadWords("commonWords.txt");
+        findAllNeighbors();
+        printAllNeighbors();
+    }
 
     /**
      *  Returns a sequence connecting the two given words, where a sequence is a list
