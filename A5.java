@@ -31,23 +31,24 @@ public class A5
     public static void loadWords(String fileName)
     {
         Scanner input = null;
-        Set currentSet;
-        try{
+        TreeSet currentSet;
+        try
+        {
             input = new Scanner(new File(fileName));
             while (input.hasNext())
             {
                 String word = input.next().toLowerCase();
-                if (dict.get(word.length()) == null)
-                    dict.put(word.length(), new TreeSet<String>());
                 currentSet = dict.get(word.length());
+                if (currentSet == null) {
+                    currentSet = new TreeSet<String>();
+                    dict.put(word.length(), currentSet);
+                }
                 currentSet.add(word);
             }
         }catch(Exception e){
-            System.out.println("Error reading from " + fileName + ". Program will now terminate.");
-            System.exit(0);
+            e.printStackTrace();
         }finally{
-            if (input != null)
-                input.close();
+            if (input != null) input.close();
         }
     }// loadWords method
 
