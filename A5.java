@@ -12,7 +12,7 @@ public class A5
 {        
     /** define your two data structures below */
     private static Map<Integer, TreeSet> dict = new HashMap<>();
-    private static Map<String, Set<String>> neighbors = new TreeMap<>();
+    private static Map<String, List<String>> neighbors = new TreeMap<>();
 
     /**
      *  Given the name of a text file, loads the words contained
@@ -49,13 +49,6 @@ public class A5
             if (input != null)
                 input.close();
         }
-        for (int key : dict.keySet()) //display load array results
-        {
-            System.out.print(key + ": ");
-            for (Object o : dict.get(key))
-                System.out.print(o + " ");
-            System.out.println();
-        }
     }// loadWords method
 
     /**
@@ -72,7 +65,7 @@ public class A5
     public static void findNeighbors(String word)
     {
         TreeSet<String> words = dict.get(word.length());
-        Set<String> wordList = new LinkedHashSet<>();
+        List<String> wordList = new LinkedList<>();
         
         for(String w : words)
         {
@@ -123,7 +116,29 @@ public class A5
     {
         loadWords("commonWords.txt");
         findAllNeighbors();
-        printAllNeighbors();
+        //printAllNeighbors();
+        
+        ArrayList<String> sequence = findSequence( "cat", "dog" );
+        System.out.println( sequence );
+
+        sequence = findSequence( "dry", "wet" );
+        System.out.println( sequence );
+
+        sequence = findSequence( "golf", "ball" );
+        System.out.println( sequence );
+
+        sequence = findSequence( "poor", "rich" );
+        System.out.println( sequence );
+
+        sequence = findSequence( "white", "black" );
+        System.out.println( sequence );
+
+        sequence = findSequence( "synonym", "homonym" );
+        if (sequence == null)
+            System.out.println( 
+                "There is no sequence from \"synonym\" to \"homonym\"." );
+        else
+            System.out.println( sequence );
     }
 
     /**
@@ -162,13 +177,37 @@ public class A5
      */
     public static ArrayList<String> findSequence(String start, String finish)
     {
+        // private static Map<String, List<String>> neighbors = new TreeMap<>();
+    
         Queue<ArrayList<String>> q = new LinkedList<>();
         ArrayList<String> list = new ArrayList<>();
+        list.add(start);
+        q.offer(list);
         
-        q.add(list);
+        ArrayList<String> current = list;
+        List<String> wordList;
+        
+        while(true) {
+            if(q.size() == 0) return null;
+            current = q.poll();
+            wordList = (LinkedList) neighbors.get(current.get(current.size() - 1));
+            if(wordList == null) return null;
+            if(wordList.size() == 0) break;
+            if(wordList.contains(finish)) {
+                current.add(finish);
+                return current;
+            }
+            for(String word : wordList) {
+                
+                
+                ArrayList<String> copy = (ArrayList<String>)current.clone();
+                copy.add(word);
+                q.add(copy);
+            }
+        }
         
 
-        return null;
+        return current;
     }// findSequence method
 
     /**
