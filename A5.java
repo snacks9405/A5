@@ -12,7 +12,7 @@ public class A5
 {        
     /** define your two data structures below */
     private static Map<Integer, TreeSet> dict = new HashMap<>();
-    private static Map<String, TreeSet> neighbors = new TreeMap<>();
+    private static Map<String, Set<String>> neighbors = new TreeMap<>();
 
     /**
      *  Given the name of a text file, loads the words contained
@@ -71,26 +71,23 @@ public class A5
      */
     public static void findNeighbors(String word)
     {
-        Set lengthIndex = dict.get(word.length());
-        TreeSet words = new TreeSet<String>();
-        int wordDifference = 0;
-        for(Object o : lengthIndex)
+        TreeSet<String> words = dict.get(word.length());
+        Set<String> wordList = new LinkedHashSet<>();
+        
+        for(String w : words)
         {
-            char[] dictWord = o.toString().toCharArray();
-            char[] currentWord = word.toCharArray();
-            for(int i = 0; i < dictWord.length; i++)
+            boolean strike = false;
+            for(int i=0; i<word.length(); i++)
             {
-                //(dictWord[i] + currentWord[i]) % 2////wip
+                if(w.charAt(i) != word.charAt(i))
+                {
+                    if(strike) break;
+                    strike = true;
+                }
             }
-            if (wordDifference == 1) words.add(o.toString());
+            if(strike) wordList.add(word);
         }
-        if (words.isEmpty())
-            return;
-        else
-        {
-            System.out.println(word + words.toString());
-            neighbors.put(word, words);
-        }
+        if(wordList.size() != 0) neighbors.put(word, wordList);
     }// findNeighbors method
 
     /**
@@ -102,13 +99,10 @@ public class A5
     public static void findAllNeighbors()
     {
         Set<String> currentSet;
-        String currentWord;
         for (int key : dict.keySet()) 
         {
             currentSet = dict.get(key);
-            for (String word : currentSet)
-                findNeighbors(word);
-
+            for (String word : currentSet) findNeighbors(word);
         }
     }// findAllNeighbors method
 
@@ -119,10 +113,17 @@ public class A5
      */
     public static void printAllNeighbors()
     {
-        // for (String key : neighbors.keySet())
-        // {
-            // System.out.println();    
-        // }
+        Map<String, Set<String>> neighbors = new TreeMap<>();
+
+        for (String key : neighbors.keySet()) {
+            System.out.printf("%s: [", key);
+            int i = 0;
+            for(String word: neighbors.get(key)) {
+                System.out.printf("%s%s", i++ != 0 ? " " : "", word);
+            }
+            System.out.println("]");
+            
+        }
     }// printAllNeighbors method
 
     public static void testMe()
