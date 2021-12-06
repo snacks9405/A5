@@ -1,7 +1,7 @@
 /**
  * Assignment 5
  *
- * @author YOUR NAME GOES HERE
+ * @author michael hulbert & alex rodriguez (all starz)
  * @version 12/13/2021
  */
 
@@ -67,7 +67,7 @@ public class A5
     {
         TreeSet<String> words = dict.get(word.length());
         List<String> wordList = new LinkedList<>();
-        
+
         for(String w : words)
         {
             int strikes = 0;
@@ -113,35 +113,6 @@ public class A5
         }
     }// printAllNeighbors method
 
-    public static void testMe()
-    {
-        loadWords("commonWords.txt");
-        findAllNeighbors();
-        //printAllNeighbors();
-        
-        ArrayList<String> sequence = findSequence( "cat", "dog" );
-        System.out.println( sequence );
-
-        sequence = findSequence( "dry", "wet" );
-        System.out.println( sequence );
-
-        sequence = findSequence( "golf", "ball" );
-        System.out.println( sequence );
-
-        sequence = findSequence( "poor", "rich" );
-        System.out.println( sequence );
-
-        sequence = findSequence( "white", "black" );
-        System.out.println( sequence );
-
-        sequence = findSequence( "synonym", "homonym" );
-        if (sequence == null)
-            System.out.println( 
-                "There is no sequence from \"synonym\" to \"homonym\"." );
-        else
-            System.out.println( sequence );
-    }
-
     /**
      *  Returns a sequence connecting the two given words, where a sequence is a list
      *  of words with each word (except the first one) being a neighbor of the preceding
@@ -179,15 +150,15 @@ public class A5
     public static ArrayList<String> findSequence(String start, String finish)
     {
         // private static Map<String, List<String>> neighbors = new TreeMap<>();
-    
+
         Queue<ArrayList<String>> q = new LinkedList<>();
         ArrayList<String> list = new ArrayList<>();
         list.add(start);
         q.offer(list);
-        
-        ArrayList<String> current = list;
+
+        ArrayList<String> current;
         List<String> wordList;
-        
+
         while(true) {
             if(q.size() == 0) return null;
             current = q.poll();
@@ -199,14 +170,11 @@ public class A5
                 return current;
             }
             for(String word : wordList) {
-                
-                
                 ArrayList<String> copy = (ArrayList<String>)current.clone();
                 copy.add(word);
                 q.add(copy);
             }
         }
-        
 
         return current;
     }// findSequence method
